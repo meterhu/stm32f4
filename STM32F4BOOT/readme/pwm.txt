@@ -1,0 +1,53 @@
+CPLD:	 
+     assign out2 = T0_READ;
+	 assign out3 = T0_WRITE;
+	 assign out1 = T1_READ;
+     
+
+//================================================================
+PA1--T0_WRITE--out3--TIM2--PWM
+//================================================================
+GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;
+GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+GPIO_Init(GPIOA, &GPIO_InitStructure); 
+GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM2);
+
+
+上拉电阻R pull-up的 阻值 决定了 逻辑电平转换的沿的速度 。阻值越大，速度越低功耗越小。反之亦然。
+Push-Pull输出就是一般所说的推挽输出，在CMOS电路里面应该较CMOS输出更合适，应为在CMOS里面
+的push－pull输出能力不可能做得双极那么大。输出能力看IC内部输出极N管P管的面积。和开漏输出
+相比，push－pull的高低电平由IC的电源低定，不能简单的做逻辑操作等。push－pull是现在CMOS
+电路里面用得最多的输出级设计方式。
+
+//================================================================
+PB1--T1_READ--out1--TIM3--PWM
+//================================================================
+GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1;
+GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+GPIO_Init(GPIOB, &GPIO_InitStructure); 
+
+GPIO_PinAFConfig(GPIOB, GPIO_PinSource1, GPIO_AF_TIM3);
+
+
+//================================================================
+关于霍尔传感器CPU输入端：
+当有信号过来时，则为低电平.即当霍尔传感器对准测量磁钢时，CPU端为低电平
+
+//================================================================
+测速使用外中断。时基时钟是32位的Timer5
+测速IO设置:
+GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_7;
+GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IN;
+GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+
+
+ 
